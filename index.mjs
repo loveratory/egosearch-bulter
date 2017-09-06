@@ -5,4 +5,4 @@ import { slack as slackPublisher } from './publishers'
 
 dotenv.load()
 
-slackPublisher(twitterSubscriber())
+slackPublisher(new twitterSubscriber())
