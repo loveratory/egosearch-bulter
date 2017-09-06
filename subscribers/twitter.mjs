@@ -14,11 +14,10 @@ export default class extends EventEmitter {
   }
   regist() {
     this.t.on('tweet', data => {
-      const origin = `https://twitter.com/${data.user.screen_name}/status/${data.id}`
-      console.log(`message arrive: ${origin}`)
+      console.log(`[twitter] message id: ${data.id}, id_str: ${data.id_str}`)
       this.emit('message', {
         message: data.text,
-        origin,
+        origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
         user_name: data.user.name,
         user_icon: data.user.profile_image_url_https,
         user_id: data.user.screen_name,
