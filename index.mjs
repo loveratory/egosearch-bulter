@@ -4,3 +4,5 @@ import { twitter as twitterSubscriber } from './subscribers'
 import { slack as slackPublisher } from './publishers'
 
 dotenv.load()
+
+slackPublisher(twitterSubscriber())
