@@ -14,6 +14,7 @@ function publish (message) {
         title_link: message.origin,
         author_name: message.user_name || message.user.id,
         author_icon: message.user_icon || null,
+        author_link: message.user_url || null,
         text: message.message,
         footer: message.service,
         footer_icon: message.service_icon || null,
