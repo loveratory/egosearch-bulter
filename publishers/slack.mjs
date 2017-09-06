@@ -5,13 +5,14 @@ function requestCallback (e, res, body) {
 }
 
 function publish (message) {
-  const title = `new message by ${message.user_id ? `${message.user_id}@${message.service}` : message.service} - ${message.origin}`
+  const title = `new message by ${message.user_id}@${message.service}`
   const body = {
     attachments: [
       {
-        fallback: title,
-        pretext: message.origin,
-        author_name: message.user_name || null,
+        fallback: `${title} - ${message.origin}`,
+        title,
+        title_link: message.origin,
+        author_name: message.user_name || message.user.id,
         author_icon: message.user_icon || null,
         text: message.message,
         footer: message.service,
