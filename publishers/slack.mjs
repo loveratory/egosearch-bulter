@@ -5,17 +5,18 @@ function requestCallback (e, res, body) {
 }
 
 function publish (message) {
-  const title = `new message by ${message.name ? `${message.name}@${message.service}` : message.service} - ${message.message}`
+  const title = `new message by ${message.user_id ? `${message.user_id}@${message.service}` : message.service} - ${message.origin}`
   const body = {
     attachments: [
       {
         fallback: title,
-        title,
-        author_name: message.name || null,
-        author_icon: message.icon || null,
+        pretext: message.origin,
+        author_name: message.user_name || null,
+        author_icon: message.user_icon || null,
         text: message.message,
         footer: message.service,
-        footer: message.service_icon || null,
+        footer_icon: message.service_icon || null,
+        ts: message.timestamp || null,
         color: process.env.EGS_PUB_SLACK_COLOR || "#36a64f"
       }
     ]
@@ -23,7 +24,7 @@ function publish (message) {
   request({
     uri: process.env.EGS_PUB_SLACK_INCOMMING_HOOK_URI,
     method: 'POST',
-    body
+    body: JSON.stringify(body)
   }, requestCallback)
 }
 

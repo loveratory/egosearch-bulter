@@ -14,13 +14,18 @@ export default class extends EventEmitter {
   }
   regist() {
     this.t.on('tweet', data => {
-      console.dir(data)
+      const origin = `https://twitter.com/${data.user.screen_name}/status/${data.id}`
+      console.log(`message arrive: ${origin}`)
       this.emit('message', {
         message: data.text,
-        name: data.user.name,
-        icon: data.user.profile_image_url_https,
+        origin,
+        user_name: data.user.name,
+        user_icon: data.user.profile_image_url_https,
+        user_id: data.user.screen_name,
+        user_url: `https://twitter.com/${data.user.screen_name}`,
         service: 'twitter',
-        service_icon: 'https://abs.twimg.com/icons/apple-touch-icon-192x192.png'
+        service_icon: 'https://abs.twimg.com/icons/apple-touch-icon-192x192.png',
+        timestamp: data.timestamp_ms / 1000
       })
     })
     process.env.EGS_SUB_TWITTER_TRACKS.split(',').forEach(track => {
