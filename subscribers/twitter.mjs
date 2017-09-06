@@ -15,5 +15,8 @@ export default class extends EventEmitter {
     this.t.on('tweet', data => {
       console.dir(data)
     })
+    process.env.EGS_SUB_TWITTER_TRACKS.split(',').forEach(track => {
+      this.t.track(track)
+    })
   }
 }
