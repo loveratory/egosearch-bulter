@@ -15,6 +15,7 @@
   "homepage": "https://github.com/otofune/egosearch#readme",
   "dependencies": {
     "@std/esm": "^0.7.1",
+    "dotenv-safe": "^4.0.4",
     "node-tweet-stream": "^2.0.1"
   },
   "private": true
