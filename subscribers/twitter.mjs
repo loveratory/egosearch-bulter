@@ -1,19 +1,21 @@
-import Twitter from 'node-tweet-stream'
+import Twitter from 'twitter'
 import EventEmitter from 'events'
 
 export default class extends EventEmitter {
   constructor() {
     super()
-    this.t = new Twitter({
+    this.client = new Twitter({
       consumer_key: process.env.EGS_SUB_TWITTER_CONSUMER_KEY,
       consumer_secret: process.env.EGS_SUB_TWITTER_CONSUMER_SECRET,
-      token: process.env.EGS_SUB_TWITTER_TOKEN,
-      token_secret: process.env.EGS_SUB_TWITTER_TOKEN_SECRET,
+      access_token_key: process.env.EGS_SUB_TWITTER_TOKEN,
+      access_token_secret: process.env.EGS_SUB_TWITTER_TOKEN_SECRET,
     })
+    this.t = this.client.stream('statuses/filter', {track: process.env.EGS_SUB_TWITTER_TRACKS.replace(',', '&')})
     this.regist()
   }
   regist() {
-    this.t.on('tweet', data => {
+    this.t.on('data', data => {
+      console.dir(data)
       console.log(`[twitter] message id: ${data.id}, id_str: ${data.id_str}`)
       this.emit('message', {
         message: data.text,
@@ -27,8 +29,8 @@ export default class extends EventEmitter {
         timestamp: data.timestamp_ms / 1000
       })
     })
-    process.env.EGS_SUB_TWITTER_TRACKS.split(',').forEach(track => {
-      this.t.track(track)
+    this.t.on('error', error => {
+      throw error
     })
   }
 }
