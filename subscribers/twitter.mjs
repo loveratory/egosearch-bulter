@@ -10,7 +10,9 @@ export default class extends EventEmitter {
       access_token_key: process.env.EGS_SUB_TWITTER_TOKEN,
       access_token_secret: process.env.EGS_SUB_TWITTER_TOKEN_SECRET,
     })
-    this.t = this.client.stream('statuses/filter', {track: process.env.EGS_SUB_dTRACKS.replace(',', '&')})
+    this.t = this.client.stream('statuses/filter', {
+      track: process.env.EGS_SUB_TRACKS
+    })
     this.regist()
   }
   regist() {

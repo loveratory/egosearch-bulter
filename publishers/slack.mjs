@@ -30,7 +30,7 @@ function publish (message) {
   }, requestCallback)
 }
 
-export default function regist (publisher) {
+export function init (publisher) {
   publisher.on('message', message => {
     publish(message)
   })
