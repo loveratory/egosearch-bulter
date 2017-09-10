@@ -57,4 +57,4 @@ Incomming Hook URIを発行した上で以下のフィールドを環境変数�
 名称|説明
 --|--
 `EGS_PUB_SLACK_INCOMMING_HOOK_URI`|Incomming Hook URI
-`EGS_PUB_SLACK_COLOR`|[content and links to messages | Slack](https://api.slack.com/docs/message-attachments#color)
+`EGS_PUB_SLACK_COLOR`|[content and links to messages \| Slack](https://api.slack.com/docs/message-attachments#color)
