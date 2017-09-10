@@ -27,7 +27,7 @@ editor .env
 
 購読サービスについて
 ---
-### Twitter
+### twitter
 Twitterのpublic streamsから情報を取得します。
 
 #### 設定
