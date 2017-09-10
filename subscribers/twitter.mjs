@@ -1,6 +1,25 @@
 import Twitter from 'twitter'
 import EventEmitter from 'events'
 
+const messageExtractor = (data) => {
+  let message = data.text
+  // if retweeted status, create custom message
+  if (data.retweeted_status) {
+    message = `RT @${data.retweeted_status.user.screen_name}: ${messageExtractor(data.retweeted_status)}`
+  }
+  // if quoted, non retweeted status, create custom message
+  if (data.is_quote_status && !data.retweeted_status && data.quoted_status) {
+    message = `QT ${data.text.substr(...data.display_text_range)} @${data.quoted_status.user.screen_name}: ${messageExtractor(data.quoted_status)}`
+  }
+  // if data.entries.urls, replace URLs on message with it origin URLs 
+  if (data.entities.urls) {
+    data.entities.urls.forEach(url => {
+      message = message.replace(url.url, url.expanded_url)
+    })
+  }
+  return message
+}
+
 export default class extends EventEmitter {
   constructor() {
     super()
@@ -19,19 +38,8 @@ export default class extends EventEmitter {
     this.t.on('data', data => {
       // ignore retweet if ignore flag was turned on
       if (process.env.EGS_SUB_TWITTER_IGNORE_RT === '1' && data.retweeted_status) return
-      let message = data.text
-      // if quoted status, create custom message
-      if (data.is_quote_status) {
-        message = `QT ${data.text.substr(data.display_text_range[1]).trim()}: ${data.text.substr(...data.display_text_range)}`
-      }
-      // if data.entries.urls, replace URLs on message with it origin URLs 
-      if (data.entities.urls) {
-        data.entities.urls.forEach(url => {
-          message = message.replace(url.url, url.expanded_url)
-        })
-      }
       this.emit('message', {
-        message,
+        message: messageExtractor(data),
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
         user_name: data.user.name,
         user_icon: data.user.profile_image_url_https,
