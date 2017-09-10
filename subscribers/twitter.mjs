@@ -24,6 +24,12 @@ export default class extends EventEmitter {
       if (data.is_quote_status) {
         message = `QT ${data.text.substr(data.display_text_range[1]).trim()}: ${data.text.substr(...data.display_text_range)}`
       }
+      // if data.entries.urls, replace URLs on message with it origin URLs 
+      if (data.entities.urls) {
+        data.entities.urls.forEach(url => {
+          message = message.replace(url.url, url.expanded_url)
+        })
+      }
       this.emit('message', {
         message,
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
