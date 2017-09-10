@@ -19,8 +19,13 @@ export default class extends EventEmitter {
     this.t.on('data', data => {
       // ignore retweet if ignore flag was turned on
       if (process.env.EGS_SUB_TWITTER_IGNORE_RT === '1' && data.retweeted_status) return
+      let message = data.text
+      // if quoted status, create custom message
+      if (data.is_quote_status) {
+        message = `QT ${data.text.substr(data.display_text_range[1]).trim()}: ${data.text.substr(...data.display_text_range)}`
+      }
       this.emit('message', {
-        message: data.text,
+        message,
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
         user_name: data.user.name,
         user_icon: data.user.profile_image_url_https,
