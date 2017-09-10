@@ -39,6 +39,7 @@ Twitterのpublic streamsから情報を取得します。
 `EGS_SUB_TWITTER_CONSUMER_SECRET`|アプリケーションのConsumer Secret
 `EGS_SUB_TWITTER_TOKEN`|あなたのAccess Token
 `EGS_SUB_TWITTER_TOKEN_SECRET`|あなたのAccess Token Secret
+`EGS_SUB_TWITTER_IGNORE_RT`|`1`のときにRTを除外
 
 出版サービスについて
 ---

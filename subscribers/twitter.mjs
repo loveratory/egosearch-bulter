@@ -17,6 +17,8 @@ export default class extends EventEmitter {
   }
   regist() {
     this.t.on('data', data => {
+      // ignore retweet if ignore flag was turned on
+      if (process.env.EGS_SUB_TWITTER_IGNORE_RT === '1' && data.retweeted_status) return
       this.emit('message', {
         message: data.text,
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
