@@ -19,5 +19,10 @@
     "request": "^2.81.0",
     "twitter": "^1.7.1"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "tslint": "^5.8.0",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.6.1"
+  }
 }
