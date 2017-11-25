@@ -1,6 +1,8 @@
 import Twitter from 'twitter'
 import EventEmitter from 'events'
 
+import config from '../config'
+
 const messageExtractor = (data) => {
   let message = data.text
   // if retweeted status, create custom message
@@ -30,16 +32,50 @@ export default class extends EventEmitter {
       access_token_secret: process.env.EGS_SUB_TWITTER_TOKEN_SECRET,
     })
     this.t = this.client.stream('statuses/filter', {
-      track: process.env.EGS_SUB_TRACKS
+      track: config.tracks.join(',')
     })
     this.regist()
   }
+
+  extractMessage(data) {
+    let message = data.text
+    // if retweeted status, create custom message
+    if (data.retweeted_status) {
+      message = `RT @${data.retweeted_status.user.screen_name}: ${messageExtractor(data.retweeted_status)}`
+    }
+    // if quoted, non retweeted status, create custom message
+    if (data.is_quote_status && !data.retweeted_status && data.quoted_status) {
+      message = `QT ${data.text.substr(...data.display_text_range)} @${data.quoted_status.user.screen_name}: ${messageExtractor(data.quoted_status)}`
+    }
+    // if data.entries.urls, replace URLs on message with it origin URLs 
+    if (data.entities.urls) {
+      data.entities.urls.forEach(url => {
+        message = message.replace(url.url, url.expanded_url)
+      })
+    }
+    return message
+  }
+
+  check_disregards(data) {
+    // continue if disregards option given
+    if (config.disregards.length === 0) return false
+    const message = data.text
+    for (const keyword of config.disregards) {
+      if (message.includes(keyword)) {
+        return true
+      }
+    }
+    return false
+  }
+
   regist() {
     this.t.on('data', data => {
       // ignore retweet if ignore flag was turned on
       if (process.env.EGS_SUB_TWITTER_IGNORE_RT === '1' && data.retweeted_status) return
+      // check disregard keywords
+      if (this.check_disregards(data)) return
       this.emit('message', {
-        message: messageExtractor(data),
+        message: this.extractMessage(data),
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
         user_name: data.user.name,
         user_icon: data.user.profile_image_url_https,
