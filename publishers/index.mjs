@@ -1,4 +1,2 @@
-import * as slack from './slack'
-import * as console from './console'
-
-export { slack, console }
+export { default as slack } from './slack'
+export { default as console } from './console'

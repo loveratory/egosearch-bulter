@@ -1,6 +1,9 @@
 import dotenv from 'dotenv-safe'
+import fs from 'fs'
 
-dotenv.load()
+if (fs.existsSync('.env')) {
+  dotenv.load()
+}
 
 function parse_track_query (query) {
   return query ? query.split(',') : []

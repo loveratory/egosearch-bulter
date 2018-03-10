@@ -56,24 +56,10 @@ export default class extends EventEmitter {
     return message
   }
 
-  check_disregards(data) {
-    // continue if disregards option given
-    if (config.disregards.length === 0) return false
-    const message = data.text
-    for (const keyword of config.disregards) {
-      if (message.includes(keyword)) {
-        return true
-      }
-    }
-    return false
-  }
-
   regist() {
     this.t.on('data', data => {
       // ignore retweet if ignore flag was turned on
       if (process.env.EGS_SUB_TWITTER_IGNORE_RT === '1' && data.retweeted_status) return
-      // check disregard keywords
-      if (this.check_disregards(data)) return
       this.emit('message', {
         message: this.extractMessage(data),
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,

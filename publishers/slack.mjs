@@ -1,5 +1,11 @@
 import request from 'request'
 
+export default class {
+  socket () {
+    return publish
+  }
+}
+
 function requestCallback (e, res, body) {
   if (e) throw(e)
 }
@@ -12,7 +18,7 @@ function publish (message) {
         fallback: `${title} - ${message.origin}`,
         title,
         title_link: message.origin,
-        author_name: message.user_name || message.user.id,
+        author_name: message.user_name || message.user_id,
         author_icon: message.user_icon || null,
         author_link: message.user_url || null,
         text: message.message,
@@ -28,10 +34,4 @@ function publish (message) {
     method: 'POST',
     body: JSON.stringify(body)
   }, requestCallback)
-}
-
-export function init (publisher) {
-  publisher.on('message', message => {
-    publish(message)
-  })
 }
