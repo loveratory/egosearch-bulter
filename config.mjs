@@ -2,7 +2,9 @@ import dotenv from 'dotenv-safe'
 import fs from 'fs'
 
 if (fs.existsSync('.env')) {
-  dotenv.load()
+  dotenv.load({
+    allowEmptyValues: true
+  })
 }
 
 function parse_track_query (query) {

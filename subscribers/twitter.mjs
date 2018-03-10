@@ -60,6 +60,11 @@ export default class extends EventEmitter {
     this.t.on('data', data => {
       // ignore retweet if ignore flag was turned on
       if (process.env.EGS_SUB_TWITTER_IGNORE_RT === '1' && data.retweeted_status) return
+      // check status lang or user lang if target language is specified
+      if (process.env.EGS_SUB_TWITTER_LANG && !(
+        data.lang === process.env.EGS_SUB_TWITTER_LANG ||
+        data.user.lang === process.env.EGS_SUB_TWITTER_LANG
+      )) return
       this.emit('message', {
         message: this.extractMessage(data),
         origin: `https://twitter.com/${data.user.screen_name}/status/${data.id_str}`,
