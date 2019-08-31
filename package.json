@@ -1,28 +1,20 @@
 {
   "name": "egosearch",
-  "main": "index.mjs",
-  "scripts": {
-    "start": "node -r @std/esm index.mjs"
-  },
+  "author": "otofune <otofune@gmail.com>",
+  "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/otofune/egosearch.git"
+    "url": "git+https://github.com/otofune/egosearch-bulter.git"
   },
-  "author": "otofune <otofune@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/otofune/egosearch/issues"
-  },
-  "homepage": "https://github.com/otofune/egosearch#readme",
+  "scripts": {},
   "dependencies": {
-    "@std/esm": "^0.7.1",
-    "dotenv-safe": "^4.0.4",
-    "request": "^2.81.0",
-    "twitter": "^1.7.1"
-  },
-  "private": true,
-  "devDependencies": {
-    "tslint": "^5.8.0",
-    "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.6.1"
+    "@types/node": "^12.7.3",
+    "@types/twit": "^2.2.22",
+    "fp-ts": "^2.0.5",
+    "io-ts": "^2.0.1",
+    "rxjs": "^6.5.2",
+    "ts-node": "^8.3.0",
+    "twit": "^2.2.11",
+    "typescript": "^3.6.2"
   }
 }
