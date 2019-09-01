@@ -15,6 +15,9 @@ export type TwitterConfig = {
 		langEquals?: string
 	}
 }
+export type SlackConfig = {
+	incomingHookURI: string,
+}
 export type Context = {
 	logger: Logger
 	tracks: string[]

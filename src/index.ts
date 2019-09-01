@@ -1,5 +1,6 @@
 import * as twitterPlugin from './plugins/twitter'
 import * as consolePlugin from './plugins/console'
+import * as slackPlugin from './plugins/slack'
 
 import { Logger, Context } from './types'
 import * as t from 'io-ts'
@@ -44,6 +45,7 @@ const main = (logger: Logger) =>  {
 	// もし設定が取得できないなら、復旧しない
 	const config = convertConfigFromEnv(process.env)
 	const twitterConfig = twitterPlugin.convertConfigFromEnv(process.env)
+	const slackConfig = slackPlugin.convertConfigFromEnv(process.env)
 
 	const context: Context = { logger, ...config }
 
@@ -53,19 +55,22 @@ const main = (logger: Logger) =>  {
 			ops.filter(twitterPlugin.filter(context, twitterConfig)),
 			ops.map(twitterPlugin.convertToMessage)
 		)
-	
+
 		const s = o.subscribe({
 			next: (m) => {
-				consolePlugin.consumer(m)
+				consolePlugin.consume()(m)
+				slackPlugin.consume(slackConfig)(m)
 			},
 			error: (e) => {
 				logger.error(e)
 				s.unsubscribe()
+				// TODO: 永続化の責務は分割する
 				run()
 			},
 			complete: () => {
 				logger.error('completed')
 				s.unsubscribe()
+				// TODO: 永続化の責務は分割する
 				run()
 			}
 		})
