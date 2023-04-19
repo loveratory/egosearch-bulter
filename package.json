@@ -16,7 +16,7 @@
   "dependencies": {
     "@std/esm": "^0.7.1",
     "dotenv-safe": "^4.0.4",
-    "request": "^2.81.0",
+    "request": "^2.88.2",
     "twitter": "^1.7.1"
   },
   "private": true,
